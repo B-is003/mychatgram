@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "47827902694",
+    "project_id": "mychatsgram",
+    "storage_bucket": "mychatsgram.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47827902694:android:8327b32e3f428b972a1b27",
+        "android_client_info": {
+          "package_name": "com.bbb.mychatsgram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47827902694-ho062hgvu3fqj52okal03ikf8rapmrep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bbb.mychatsgram",
+            "certificate_hash": "be79c4f36c8b7e71d9efb315618eb76c1774b1c9"
+          }
+        },
+        {
+          "client_id": "47827902694-heufdi1efnflfbtvrgs4598m7ktrda0h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk0PDcVjZUGq6YgunIePl_y-dHcjGfC3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47827902694-heufdi1efnflfbtvrgs4598m7ktrda0h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
