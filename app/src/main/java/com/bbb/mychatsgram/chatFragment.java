@@ -86,19 +86,19 @@ public class chatFragment extends Fragment {
             @Override
             public void onDataChanged() {
                 super.onDataChanged();
-                Log.d("Data23", "ACac");
+
             }
 
             @Override
             public void startListening() {
                 super.startListening();
-                Log.d("Data23", "It started");
+
             }
 
             @Override
             public void stopListening() {
                 super.stopListening();
-                Log.d("Data23", "It stopped:");
+
             }
 
             @NonNull
@@ -116,7 +116,7 @@ public class chatFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mrecyclerview.setLayoutManager(linearLayoutManager);
         mrecyclerview.setAdapter(chatAdapter);
-        Log.d("Data23", "It 1 started");
+
         chatAdapter.startListening();
 
         return v;
