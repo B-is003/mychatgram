@@ -1,6 +1,7 @@
 package com.bbb.mychatsgram;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,11 +117,9 @@ public class MessagesAdapter extends RecyclerView.Adapter {
         }
     }
 
-
-
-
-
-
-
-
+    public void setMessagesArrayList(ArrayList<Messages> messagesArrayList) {
+        this.messagesArrayList = messagesArrayList;
+        Log.d("Data25", "Success data ds");
+        notifyDataSetChanged();
+    }
 }
