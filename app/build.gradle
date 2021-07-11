@@ -49,4 +49,9 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:4.1.0'
 
 
+    implementation 'com.github.3llomi:CircularStatusView:V1.0.2'
+
+
+
+
 }

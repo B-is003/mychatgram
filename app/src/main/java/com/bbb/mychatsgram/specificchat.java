@@ -140,6 +140,8 @@ public class specificchat extends AppCompatActivity {
         });
 
 
+
+
         mnameofspecificuser.setText(mrecievername);
         String uri = intent.getStringExtra("imageuri");
         if (uri.isEmpty()) {
@@ -167,17 +169,20 @@ public class specificchat extends AppCompatActivity {
                             .push().setValue(messages).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-//                            firebaseDatabase.getReference()
-//                                    .child("chats")
-//                                    .child(recieverroom)
-//                                    .child("messages")
-//                                    .push()
-//                                    .setValue(messages).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//
-//                                }
-//                            });
+                            firebaseDatabase.getReference()
+                                    .child("chats")
+                                    .child(recieverroom)
+                                    .child("messages")
+                                    .push()
+                                    .setValue(messages).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                }
+                            });
+
+
+
                         }
                     }).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -213,6 +218,8 @@ public class specificchat extends AppCompatActivity {
 
             }
         });
+
+
 
 
     }
