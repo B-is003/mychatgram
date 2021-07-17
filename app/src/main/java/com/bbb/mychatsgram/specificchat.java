@@ -1,12 +1,15 @@
 package com.bbb.mychatsgram;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +28,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -39,14 +45,18 @@ public class specificchat extends AppCompatActivity {
 
     CardView msendmessagecardview;
     androidx.appcompat.widget.Toolbar mtoolbarofspecificchat;
-    ImageView mimageviewofspecificuser;
+    ImageView mimageviewofspecificuser,mcamera ;
     TextView mnameofspecificuser;
+
+    ProgressDialog dialog;
+
 
     private String enteredmessage;
     Intent intent;
     String mrecievername, sendername, mrecieveruid, msenderuid;
     private FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
+    FirebaseStorage storage;
     String senderroom, recieverroom;
 
     ImageButton mbackbuttonofspecificchat;
@@ -66,6 +76,10 @@ public class specificchat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specificchat);
 
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Sending image...");
+        dialog.setCancelable(false);
+
         mgetmessage = findViewById(R.id.getmessage);
         msendmessagecardview = findViewById(R.id.carviewofsendmessage);
         msendmessagebutton = findViewById(R.id.imageviewsendmessage);
@@ -73,6 +87,7 @@ public class specificchat extends AppCompatActivity {
         mnameofspecificuser = findViewById(R.id.Nameofspecificuser);
         mimageviewofspecificuser = findViewById(R.id.specificuserimageinimageview);
         mbackbuttonofspecificchat = findViewById(R.id.backbuttonofspecificchat);
+        mcamera=findViewById(R.id.camera);
 
         messagesArrayList = new ArrayList<>();
         messagerecyclerview = findViewById(R.id.recyclerviewofspecific);
@@ -80,7 +95,7 @@ public class specificchat extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         messagerecyclerview.setLayoutManager(linearLayoutManager);
-        messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList);
+        messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList,mrecieveruid);
         messagerecyclerview.setAdapter(messagesAdapter);
 
 
@@ -106,22 +121,24 @@ public class specificchat extends AppCompatActivity {
         mrecieveruid = getIntent().getStringExtra("receiveruid");
         mrecievername = getIntent().getStringExtra("name");
 
-
+        Log.d("Exec343",msenderuid+ " intent "+mrecieveruid);
         senderroom = msenderuid + mrecieveruid;
         recieverroom = mrecieveruid + msenderuid;
 
+        storage = FirebaseStorage.getInstance();
 
         DatabaseReference databaseReference = firebaseDatabase.getReference().child("chats").child(senderroom).child("messages");
-        messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList);
+        messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList,mrecieveruid);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 messagesArrayList.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     Messages messages = snapshot1.getValue(Messages.class);
+                    messages.setMessageID(snapshot1.getKey());
                     messagesArrayList.add(messages);
                 }
-                messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList);
+                messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList,mrecieveruid);
                 messagerecyclerview.setAdapter(messagesAdapter);
             }
 
@@ -161,6 +178,7 @@ public class specificchat extends AppCompatActivity {
                 } else {
                     Date date = new Date();
                     currenttime = simpleDateFormat.format(calendar.getTime());
+                    Log.d("Exec343","Time :  "+simpleDateFormat.format(calendar.getTime())+ "  "+calendar.getTime());
                     Messages messages = new Messages(enteredmessage, firebaseAuth.getUid(), date.getTime(), currenttime);
                     firebaseDatabase = FirebaseDatabase.getInstance();
                     firebaseDatabase.getReference().child("chats")
@@ -195,22 +213,25 @@ public class specificchat extends AppCompatActivity {
                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                         Messages messages = snapshot1.getValue(Messages.class);
                                         messagesArrayList.add(messages);
+                                        messages.setMessageID(snapshot1.getKey());
                                         Log.d("Data25", messages.message);
                                     }
-                                    messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList);
+                                    messagesAdapter = new MessagesAdapter(specificchat.this, messagesArrayList,mrecieveruid);
                                     messagerecyclerview.setLayoutManager(linearLayoutManager);
                                     messagerecyclerview.setAdapter(messagesAdapter);
                                 }
 
                                 @Override
+
                                 public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
                             });
                         }
                     });
-
-
+//6ssP6obeiUQXQrrFmc7SskGMkrI26ssP6obeiUQXQrrFmc7SskGMkrI2
+//6ssP6obeiUQXQrrFmc7SskGMkrI2 XLzcUm3iYePAtT2Enboj7hbv1x63
+                    //-MeT00GmY7mbTLaIwkfS
 
                     mgetmessage.setText(null);
 
@@ -220,14 +241,52 @@ public class specificchat extends AppCompatActivity {
 
             }
         });
-        
+        mcamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent,25);
 
-
-
-
+            }
+        });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 25){
+            if(data == null){
+                if(data.getData() !=null){
+                  Uri selectedImage = data.getData();
+                  Calendar calender = Calendar.getInstance();
+                    StorageReference reference = storage.getReference().child("chats").child(calendar.getTimeInMillis() +"");
+                    dialog.show();
+                    reference.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            dialog.dismiss();
+                            if(task.isSuccessful()){
+                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                      String filePath = uri.toString();
+                                        Toast.makeText(specificchat.this,filePath,Toast.LENGTH_SHORT).show();
+
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+
+                }
+            }
+        }
+    }
 
     @Override
     public void onStart() {

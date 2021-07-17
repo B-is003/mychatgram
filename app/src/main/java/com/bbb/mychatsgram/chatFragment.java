@@ -1,5 +1,6 @@
 package com.bbb.mychatsgram;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,7 +18,17 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,7 +75,7 @@ public class chatFragment extends Fragment {
                 Glide.with(getContext()).load(uri).into(mimageviewofuser);
                 if (firebasemodel.getStatus().equals("Online")) {
                     noteViewHolder.statusofuser.setText(firebasemodel.getStatus());
-                    noteViewHolder.statusofuser.setTextColor(Color.GREEN);
+                    noteViewHolder.statusofuser.setTextColor(Color.BLUE);
                 } else {
                     noteViewHolder.statusofuser.setText(firebasemodel.getStatus());
                 }
@@ -148,6 +159,15 @@ public class chatFragment extends Fragment {
         super.onStart();
         chatAdapter.startListening();
         Log.d("Data23", "It 2started");
+        Dexter.withContext(getContext())
+                .withPermissions(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_CONTACTS,
+                        Manifest.permission.RECORD_AUDIO
+                ).withListener(new MultiplePermissionsListener() {
+            @Override public void onPermissionsChecked(MultiplePermissionsReport report) {/* ... */}
+            @Override public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
+        }).check();
     }
 
     @Override

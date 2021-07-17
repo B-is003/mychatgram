@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,6 +20,12 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 public class chatActivity extends AppCompatActivity {
 
@@ -42,7 +49,7 @@ public class chatActivity extends AppCompatActivity {
 
         tabLayout=findViewById(R.id.include);
         mchat=findViewById(R.id.chat);
-        mcall=findViewById(R.id.calls);
+
         mstatus=findViewById(R.id.status);
         viewPager=findViewById(R.id.fragmentcontainer);
 
@@ -130,7 +137,7 @@ public class chatActivity extends AppCompatActivity {
         documentReference.update("status","Offline").addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Now User is Offline",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"",Toast.LENGTH_SHORT).cancel();
             }
         });
 
@@ -145,9 +152,15 @@ public class chatActivity extends AppCompatActivity {
         documentReference.update("status","Online").addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(),"Now User is Online",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"You are online",Toast.LENGTH_SHORT).cancel();
             }
         });
-
+        Dexter.withContext(this)
+                .withPermission(Manifest.permission.CAMERA)
+                .withListener(new PermissionListener() {
+                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {/* ... */}
+                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {/* ... */}
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
+                }).check();
     }
 }

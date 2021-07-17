@@ -8,7 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.pgreze.reactions.ReactionPopup;
+import com.github.pgreze.reactions.ReactionsConfig;
+import com.github.pgreze.reactions.ReactionsConfigBuilder;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,13 +27,14 @@ public class MessagesAdapter extends RecyclerView.Adapter {
 
     Context context;
     ArrayList<Messages> messagesArrayList;
-
+    String receiverID;
     int ITEM_SEND=1;
     int ITEM_RECIEVE=2;
 
-    public MessagesAdapter(Context context, ArrayList<Messages> messagesArrayList) {
+    public MessagesAdapter(Context context, ArrayList<Messages> messagesArrayList, String receiverID) {
         this.context = context;
         this.messagesArrayList = messagesArrayList;
+        this.receiverID = receiverID;
 
     }
 
@@ -55,26 +62,13 @@ public class MessagesAdapter extends RecyclerView.Adapter {
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                new AlertDialog.Builder(context)
-                        .setTitle("Delete")
-                        .setMessage("Are you sure you want to delete this message")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                if (messages.getSenderId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    Log.d("Exec343","  "+messages.getCurrenttime());
+                 deleteMessages(messages.getSenderId(),receiverID,messages);
 
-                                String senderRoom = FirebaseAuth.getInstance().getUid() + messages.senderId;
-                                database.getReference().child("chats").child(senderRoom)
-                                        .child(messages.getSenderId())
-                                        .setValue(null);
-
-                            }
-                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
+                } else {
+                    deleteMessages(FirebaseAuth.getInstance().getCurrentUser().getUid(),messages.getSenderId(),messages);
+                }
 
 
                 return false;
@@ -85,6 +79,7 @@ public class MessagesAdapter extends RecyclerView.Adapter {
         {
             SenderViewHolder viewHolder=(SenderViewHolder)holder;
             viewHolder.textViewmessaage.setText(messages.getMessage());
+
             viewHolder.timeofmessage.setText(messages.getCurrenttime());
         }
         else
@@ -96,6 +91,39 @@ public class MessagesAdapter extends RecyclerView.Adapter {
 
 
 
+    }
+
+    private void deleteMessages(String senderId, String receiverID,Messages messages) {
+        new AlertDialog.Builder(context)
+                .setTitle("Delete")
+                .setMessage("Are you sure you want to delete this message")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        String senderRoom = senderId + receiverID;
+                        database.getReference().child("chats").child(senderRoom).child("messages")
+                                .child(messages.getMessageID())
+                                .setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                Toast.makeText(context,"Message has been deleted",Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
     }
 
     @Override

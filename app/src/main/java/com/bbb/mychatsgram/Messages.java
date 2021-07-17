@@ -1,8 +1,11 @@
 package com.bbb.mychatsgram;
 
+import com.github.pgreze.reactions.ReactionsConfig;
+import com.github.pgreze.reactions.ReactionsConfigBuilder;
+
 public class Messages {
 
-
+    String messageID;
     String message;
     String senderId;
     long timestamp;
@@ -18,6 +21,14 @@ public class Messages {
         this.senderId = senderId;
         this.timestamp = timestamp;
         this.currenttime = currenttime;
+    }
+
+    public String getMessageID() {
+        return messageID;
+    }
+
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
     }
 
     public String getMessage() {
