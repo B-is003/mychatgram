@@ -26,6 +26,7 @@ public class otpAuthentication extends AppCompatActivity {
     android.widget.Button mverifyotp;
     String enteredotp;
 
+
     FirebaseAuth firebaseAuth;
     ProgressBar mprogressbarofotpauth;
 
@@ -38,6 +39,7 @@ public class otpAuthentication extends AppCompatActivity {
         mchangenumber = findViewById(R.id.changenumber);
         mverifyotp = findViewById(R.id.verifyotp);
         mgetotp = findViewById(R.id.getotp);
+        mchangenumber = findViewById(R.id.changenumber);
         mprogressbarofotpauth = findViewById(R.id.progressbarofotpauth);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -66,6 +68,8 @@ public class otpAuthentication extends AppCompatActivity {
                 }
             }
         });
+
+
 
 
     }

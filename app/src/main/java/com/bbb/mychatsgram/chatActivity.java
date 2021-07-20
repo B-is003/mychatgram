@@ -110,8 +110,13 @@ public class chatActivity extends AppCompatActivity {
                 break;
 
             case R.id.settings:
-                Toast.makeText(getApplicationContext(),"Settign is clicked",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent (chatActivity.this,MainActivity.class);
+                firebaseAuth.signOut();
+                Toast.makeText(getApplicationContext(),"Logout Succesful",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Login again",Toast.LENGTH_SHORT).show();
+                startActivity(i);
                 break;
+
         }
 
 

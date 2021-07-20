@@ -7,7 +7,7 @@
 
     </item>
 
-    <item android:title="Settings"
+    <item android:title="Logout"
         android:id="@+id/settings">
 
     </item>

@@ -70,7 +70,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/defaultprofile"
+            android:src="@drawable/men"
             android:id="@+id/getnewuserimageinimageview"
             android:scaleType="centerCrop">
 
@@ -82,28 +82,30 @@
 
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
         android:inputType="textCapWords"
-        android:hint="Enter Your New Name Here"
+        android:hint="  Enter Your New Userame Here"
+        android:textAlignment="center"
+        android:backgroundTint="#A9A9A9"
+        android:background="@drawable/messagebackgroun"
         android:layout_centerInParent="true"
         android:id="@+id/getnewusername"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="90dp"
-        android:layout_marginRight="90dp"
+
         >
 
     </EditText>
 
 
     <android.widget.Button
-        android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/getnewusername"
         android:id="@+id/updateprofilebutton"
-        android:layout_marginTop="30dp"
-        android:background="#0000CD"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/backgroun"
         android:text="UPDATE PROFILE"
         android:textColor="@color/white">
 

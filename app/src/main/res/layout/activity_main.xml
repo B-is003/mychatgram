@@ -22,7 +22,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ChatsGram Will Send OTP To Your Entered Number"
+        android:text="My ChatsGram Will Send OTP To Your Entered Number"
         android:textSize="20sp"
         android:fontFamily="@font/raleway"
         android:textAlignment="center"
@@ -65,13 +65,14 @@
 
     <EditText
         android:id="@+id/getphonenumber"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
         android:layout_below="@id/centerhorizontalline"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="50dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="70dp"
-        android:background="#462196F3"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/messagebackgroun"
         android:hint="Enter Your Number Here"
         android:inputType="number"
         android:textAlignment="center"
@@ -82,18 +83,20 @@
 
 
     <android.widget.Button
-        android:layout_width="wrap_content"
+        android:layout_width="290dp"
         android:layout_height="40dp"
         android:layout_below="@id/getphonenumber"
         android:id="@+id/sendotpbutton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
+
         android:paddingLeft="40dp"
         android:text="Sent OTP"
+        android:textIsSelectable="true"
         android:textSize="15sp"
         android:paddingRight="40dp"
-        android:background="#0000CD">
+        android:background="@drawable/backgroun">
 
     </android.widget.Button>
 

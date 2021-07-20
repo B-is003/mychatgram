@@ -247,7 +247,7 @@ public class specificchat extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,25);
+                startActivity(intent);
 
             }
         });
@@ -263,7 +263,10 @@ public class specificchat extends AppCompatActivity {
                 if(data.getData() !=null){
                   Uri selectedImage = data.getData();
                   Calendar calender = Calendar.getInstance();
-                    StorageReference reference = storage.getReference().child("chats").child(calendar.getTimeInMillis() +"");
+                    StorageReference reference = storage.getReference().child("chats")
+                            //.child(senderroom)
+                            //.child("messages")
+                            .child(calendar.getTimeInMillis() +"");
                     dialog.show();
                     reference.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
